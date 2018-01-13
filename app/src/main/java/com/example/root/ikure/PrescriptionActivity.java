@@ -66,46 +66,52 @@ public class PrescriptionActivity  extends AppCompatActivity{
             @Override
             public void onResponse(Call<PresListDetail> call, final Response<PresListDetail> result) {
                 progressDialog.dismiss();
-                if(result.body().getPrescriptionlist().size()==0){
-                    //Toast.makeText(List_display.this,"Nothing to show",Toast.LENGTH_LONG).show();
-                    //Intent i=new Intent(List_display.this,MainActivity.class);
-                    //startActivity(i);
-                    // return;
+                if(result.body().getError()){
                     bullshit();
-
                 }
-                if(result!=null){
-                    if(result.body().getPrescriptionlist().size()>0){
-                        for(int i=0;i<result.body().getPrescriptionlist().size();i++){
-                            dy.add(i,new Data_class_two(result.body().getPrescriptionlist().get(i).getPid(),
-                                    result.body().getPrescriptionlist().get(i).getId(),
-                                    convert(result.body().getPrescriptionlist().get(i).getTimestamp())));
-                        }
-                        presAdapter = new PresAdapter(getBaseContext(), dy);
+                else {
+                    if (result.body().getPrescriptionlist().size() == 0) {
+                        //Toast.makeText(List_display.this,"Nothing to show",Toast.LENGTH_LONG).show();
+                        //Intent i=new Intent(List_display.this,MainActivity.class);
+                        //startActivity(i);
+                        // return;
+                        bullshit();
 
-                        PresListView = (ListView) findViewById(R.id.list_of_pres);
-                        try {
-                            PresListView.setAdapter(presAdapter);
-                        } catch (NullPointerException e) {
-                            e.printStackTrace();
+                    }
+                    if (result != null) {
+                        if (result.body().getPrescriptionlist().size() > 0) {
+                            for (int i = 0; i < result.body().getPrescriptionlist().size(); i++) {
+                                dy.add(i, new Data_class_two(result.body().getPrescriptionlist().get(i).getPid(),
+                                        result.body().getPrescriptionlist().get(i).getId(),
+                                        convert(result.body().getPrescriptionlist().get(i).getTimestamp())));
+                            }
+                            presAdapter = new PresAdapter(getBaseContext(), dy);
+
+                            PresListView = (ListView) findViewById(R.id.list_of_pres);
+                            try {
+                                PresListView.setAdapter(presAdapter);
+                            } catch (NullPointerException e) {
+                                e.printStackTrace();
+                            }
                         }
                     }
-                }
 
-                if(result.body().getPrescriptionlist().size()!=0){
+
+                if(result.body().getPrescriptionlist().size()!=0) {
                     PresListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                         @Override
                         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                             //Toast.makeText(List_display.this,"Hello",Toast.LENGTH_SHORT).show();
-                            String url=result.body().getPrescriptionlist().get(position).getId();
-                            Intent k=new Intent( PrescriptionActivity.this,DisplayPresActivity.class);
+                            String url = result.body().getPrescriptionlist().get(position).getId();
+                            Intent k = new Intent(PrescriptionActivity.this, DisplayPresActivity.class);
                             //String str = Integer.toString(position);
-                            k.putExtra("img",url);
+                            k.putExtra("img", url);
                             //k.putExtra("card_no",patient);
                             startActivity(k);
                             // pass the intent here
                         }
                     });
+                }
                 }
             }
 

@@ -20,27 +20,25 @@ import retrofit2.http.Url;
  */
 
 public interface ApiInterface {
-    @GET("api/patientlist")
+    @GET("patient/patientlist")
 //    @FormUrlEncoded
     Call<CardDetails> getDetails(@Query("card") String format);
 
-    @GET("api/patientdetails")
+    @GET("patient/patientdetails")
     Call<PatientDetails> getDetails2(@Query("pid") String pid);
 
-    @GET("api/prescriptionlist")
+    @GET("prescription/prescriptionlist")
     Call<PresListDetail> getDetails3(@Query("pid") String pid);
 
-    @GET("api/prescriptiondetails")
+    @GET("prescription/prescriptiondetails")
     Call<ShowTheImage> getDetails4(@Query("id") String pid);
 
-    @GET("api/ecglist")
+    @GET("ecg/ecglist")
     Call<EcgListDetail> getDetails5(@Query("pid") String pid);
 
-    @GET("api/ecgdetails")
+    @GET("ecg/ecgdetails")
     Call<ShowTheEcg> getDetails6(@Query("id") String pid);
 
-    @GET
-    Call<ResponseBody> downloadFileWithDynamicUrlSync(@Url String fileurl);
 
 
 

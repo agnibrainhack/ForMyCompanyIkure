@@ -36,14 +36,14 @@ public class PresAdapter extends ArrayAdapter<Data_class_two> {
         final Data_class_two note = noteList.get(position);
 
         if (note != null) {
-           // TextView title = (TextView) v.findViewById(R.id.txt1);
+            TextView title = (TextView) v.findViewById(R.id.txt3);
             TextView description = (TextView) v.findViewById(R.id.txt2);
             //TextView time = (TextView) v.findViewById(R.id.txt3);
 
-           /* if (title != null) {
+            if (title != null) {
                 title.setText(note.getTitle());
 
-            }*/
+            }
             if (description != null) {
                 description.setText(note.gettime());
             }

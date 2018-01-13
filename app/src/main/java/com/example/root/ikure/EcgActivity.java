@@ -70,43 +70,47 @@ public class EcgActivity extends AppCompatActivity {
             @Override
             public void onResponse(Call<EcgListDetail> call, final Response<EcgListDetail> result) {
                 progressDialog.dismiss();
-                if(result.body().getEcglist().size()==0){
+                if(result.body().getError()){
                     bullshit();
                 }
-                if(result!=null){
-                    if(result.body().getEcglist().size()>0){
-                        for(int i=0;i<result.body().getEcglist().size();i++){
-                            dy.add(i,new Data_class_three(result.body().getEcglist().get(i).getPid(),
-                                    result.body().getEcglist().get(i).getId(),
-                                    convert(result.body().getEcglist().get(i).getTimestamp())));
-                        }
-                        ecgAdapter = new EcgAdapter(getBaseContext(), dy);
+                else {
+                    if (result.body().getEcglist().size() == 0) {
+                        bullshit();
+                    }
+                    if (result != null) {
+                        if (result.body().getEcglist().size() > 0) {
+                            for (int i = 0; i < result.body().getEcglist().size(); i++) {
+                                dy.add(i, new Data_class_three(result.body().getEcglist().get(i).getPid(),
+                                        result.body().getEcglist().get(i).getId(),
+                                        convert(result.body().getEcglist().get(i).getTimestamp())));
+                            }
+                            ecgAdapter = new EcgAdapter(getBaseContext(), dy);
 
-                        EcgListView = (ListView) findViewById(R.id.list_of_ecg);
-                        try {
-                            EcgListView.setAdapter(ecgAdapter);
-                        } catch (NullPointerException e) {
-                            e.printStackTrace();
+                            EcgListView = (ListView) findViewById(R.id.list_of_ecg);
+                            try {
+                                EcgListView.setAdapter(ecgAdapter);
+                            } catch (NullPointerException e) {
+                                e.printStackTrace();
+                            }
                         }
                     }
-                }
 
-                if(result.body().getEcglist().size()!=0){
-                    EcgListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                        @Override
-                        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                            //Toast.makeText(List_display.this,"Hello",Toast.LENGTH_SHORT).show();
-                            String url=result.body().getEcglist().get(position).getId();
-                            Intent k=new Intent( EcgActivity.this,DisplayEcgActivity.class);
-                            //String str = Integer.toString(position);
-                            k.putExtra("id",url);
-                            //k.putExtra("card_no",patient);
-                            startActivity(k);
-                            // pass the intent here
-                        }
-                    });
+                    if (result.body().getEcglist().size() != 0) {
+                        EcgListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                            @Override
+                            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                                //Toast.makeText(List_display.this,"Hello",Toast.LENGTH_SHORT).show();
+                                String url = result.body().getEcglist().get(position).getId();
+                                Intent k = new Intent(EcgActivity.this, DisplayEcgActivity.class);
+                                //String str = Integer.toString(position);
+                                k.putExtra("id", url);
+                                //k.putExtra("card_no",patient);
+                                startActivity(k);
+                                // pass the intent here
+                            }
+                        });
+                    }
                 }
-
 
             }
 

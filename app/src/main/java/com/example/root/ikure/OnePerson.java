@@ -97,7 +97,7 @@ public class OnePerson extends AppCompatActivity {
             public void onResponse(Call<PatientDetails> call, Response<PatientDetails> response) {
                 name.setText(response.body().getName());
                 age.setText(response.body().getAge());
-                last.setText(convert(response.body().getRegistration_date()));
+                last.setText(response.body().getRegistration_date());
                 Glide.with(getBaseContext())
                         .load(response.body().getPatient_image())
                         .override(250,250)
@@ -116,12 +116,5 @@ public class OnePerson extends AppCompatActivity {
         });
     }
 
-    private String convert(String time) {
-        long tim = Long.parseLong(time);
-        tim = tim *1000;
-        @SuppressLint("SimpleDateFormat") SimpleDateFormat formatter = new SimpleDateFormat("EEE, d MMM yyyy HH:mm:ss");
-        return formatter.format(tim);
 
-        //return date;
-    }
 }
