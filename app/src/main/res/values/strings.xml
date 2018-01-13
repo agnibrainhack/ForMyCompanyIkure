@@ -1,0 +1,10 @@
+<resources>
+    <string name="app_name">Ikure</string>
+    <string name="alert.api.211">Input fields missing</string>
+    <string name="alert.api.212">Session expired. Please relogin</string>
+    <string name="alert.unknown_error">Something went wrong. Please try again later.</string>
+    <string name="alert.network_error">A network error has occured.</string>
+    <string name="alert.common.suggestion">Network timeout. Please try again after some time.</string>
+    <string name="alert.network.ssl.error"></string>
+    <string name="alert.network.no.response.from.server"/>
+</resources>

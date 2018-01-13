@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:id="@+id/key"
+    tools:context="com.example.root.ikure.MainActivity">
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="150dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="8dp"
+        android:id="@+id/image"
+        android:background="@drawable/home_service2"/>
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="8dp"
+        android:text="Click on 'QR scan' and scan health card QR code. "
+        android:layout_marginTop="80dp"
+        android:textSize="21sp"
+        android:textStyle="italic"
+
+        android:id="@+id/serve"
+        android:layout_below="@+id/image"
+        android:gravity="center_horizontal"
+        />
+
+    <Button
+        android:id="@+id/button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:text="QR Scan"
+        android:layout_below="@id/serve"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        android:layout_marginBottom="100dp"
+        android:background="@drawable/circ_button"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true" />
+</RelativeLayout>
+</ScrollView>
