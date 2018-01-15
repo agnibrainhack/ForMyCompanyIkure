@@ -2,11 +2,14 @@ package com.example.root.ikure;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Base64;
 import android.util.Log;
+import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.Toast;
 
@@ -17,7 +20,9 @@ import com.example.root.ikure.rest.ApiInterface;
 //import com.github.barteksc.pdfviewer.PDFView;
 //import com.github.barteksc.pdfviewer.util.FitPolicy;
 
+import java.io.BufferedOutputStream;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -39,6 +44,9 @@ public class DisplayEcgActivity extends AppCompatActivity {
     File ecgpdf;
     //PDFView pdfView;
     ImageView imageView;
+    Button save;
+    byte[] imageByteArray;
+    String timestamp;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,6 +55,31 @@ public class DisplayEcgActivity extends AppCompatActivity {
         i = getIntent();
         id = i.getStringExtra("id");
         imageView = (ImageView)findViewById(R.id.pdfView);
+        save =  (Button)findViewById(R.id.save);
+        save.setVisibility(View.INVISIBLE);
+        save.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                ecgpdf = new File(getExternalFilesDir(null) + File.separator + "EcgReports"+timestamp+".jpeg");
+                BufferedOutputStream bos = null;
+                try {
+                    bos = new BufferedOutputStream(new FileOutputStream(ecgpdf));
+                    bos.write(imageByteArray);
+                    bos.flush();
+                    bos.close();
+                    Toast.makeText(DisplayEcgActivity.this, "Saved Successfully", Toast.LENGTH_SHORT).show();
+                    Intent intent = new Intent();
+                    intent.setAction(Intent.ACTION_VIEW);
+                    intent.setDataAndType(Uri.fromFile(ecgpdf), "image/*");
+                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    startActivity(intent);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                    Toast.makeText(DisplayEcgActivity.this, "Couldn't Save", Toast.LENGTH_SHORT).show();
+                }
+
+            }
+        });
         //Toast.makeText(DisplayEcgActivity.this, id, Toast.LENGTH_LONG).show();
         init();
     }
@@ -80,13 +113,17 @@ public class DisplayEcgActivity extends AppCompatActivity {
                     bullshit();
                 }
                 else{
-                    byte[] imageByteArray = Base64.decode(response.body().getEcgUrl(), Base64.DEFAULT);
+                    progressDialog.dismiss();
+                    timestamp = response.body().getTimestamp();
+                    imageByteArray = Base64.decode(response.body().getEcgUrl(), Base64.DEFAULT);
+
                     Glide.with(getBaseContext())
                             .load(imageByteArray)
                             .asBitmap()
                             .placeholder(R.drawable.ikurelogo)
                             .into(imageView);
-                    progressDialog.dismiss();
+                        save.setVisibility(View.VISIBLE);
+
                 }
 
             }
@@ -98,6 +135,7 @@ public class DisplayEcgActivity extends AppCompatActivity {
             }
         });
     }
+
 
 
 

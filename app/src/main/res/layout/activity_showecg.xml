@@ -6,7 +6,17 @@
     <ImageView
         android:id="@+id/pdfView"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="440dp"
         android:layout_margin="8dp"/>
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/pdfView"
+        android:background="@drawable/circ_button"
+        android:text="Save The ECG Report and View"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        android:layout_margin="2dp"
+        android:id="@+id/save"/>
 
 </RelativeLayout>

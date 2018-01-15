@@ -2,9 +2,12 @@ package com.example.root.ikure;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Base64;
+import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.Toast;
 
@@ -13,6 +16,11 @@ import com.example.root.ikure.pojo.earthquakeModel.PresListDetail;
 import com.example.root.ikure.pojo.earthquakeModel.ShowTheImage;
 import com.example.root.ikure.rest.ApiClient;
 import com.example.root.ikure.rest.ApiInterface;
+
+import java.io.BufferedOutputStream;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -27,6 +35,10 @@ public class DisplayPresActivity extends AppCompatActivity {
     String id;
     ImageView img;
     ProgressDialog progressDialog;
+    Button save;
+    File prespdf;
+    byte[] imageByteArray;
+    String timestamp;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,6 +47,30 @@ public class DisplayPresActivity extends AppCompatActivity {
         i = getIntent();
         id = i.getStringExtra("img");
         img = (ImageView)findViewById(R.id.showimg);
+        save = (Button)findViewById(R.id.save);
+        save.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                prespdf = new File(getExternalFilesDir(null) + File.separator + "PrescriptionReports"+timestamp+".jpeg");
+                BufferedOutputStream bos = null;
+                try {
+                    bos = new BufferedOutputStream(new FileOutputStream(prespdf));
+                    bos.write(imageByteArray);
+                    bos.flush();
+                    bos.close();
+                    Toast.makeText(DisplayPresActivity.this, "Saved Successfully", Toast.LENGTH_SHORT).show();
+                    Intent intent = new Intent();
+                    intent.setAction(Intent.ACTION_VIEW);
+                    intent.setDataAndType(Uri.fromFile(prespdf), "image/*");
+                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    startActivity(intent);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                    Toast.makeText(DisplayPresActivity.this, "Couldn't Save", Toast.LENGTH_SHORT).show();
+                }
+
+            }
+        });
         //Toast.makeText(DisplayPresActivity.this, id, Toast.LENGTH_LONG).show();
         init();
 
@@ -74,13 +110,15 @@ public class DisplayPresActivity extends AppCompatActivity {
                 }
 
                 else{
-                    byte[] imageByteArray = Base64.decode(response.body().getPrescriptionImage(), Base64.DEFAULT);
+                    imageByteArray = Base64.decode(response.body().getPrescriptionImage(), Base64.DEFAULT);
+                    timestamp = response.body().getTimestamp();
                     Glide.with(getBaseContext())
                             .load(imageByteArray)
                             .asBitmap()
                             .placeholder(R.drawable.ikurelogo)
                             .into(img);
                     progressDialog.dismiss();
+                    save.setVisibility(View.VISIBLE);
                 }
             }
 
