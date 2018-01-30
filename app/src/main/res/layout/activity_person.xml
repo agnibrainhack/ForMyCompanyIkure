@@ -127,15 +127,24 @@
                 android:layout_weight="1"
                 android:text="ECG Reports"
                 android:background="@color/colorback1"
+                android:textSize="12sp"
                 android:padding="2dp"
                 android:id="@+id/ecg"/>
             <Button
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-
+                android:textSize="12sp"
                 android:text="prescriptions"
                 android:id="@+id/pres"
+                android:background="@color/colorback3"/>
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:textSize="12sp"
+                android:text="Vitals"
+                android:id="@+id/vitals"
                 android:background="@color/colorback2"/>
 
         </LinearLayout>

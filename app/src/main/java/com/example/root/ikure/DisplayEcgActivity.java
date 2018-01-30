@@ -1,10 +1,19 @@
 package com.example.root.ikure;
 
+import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.database.Cursor;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
+import android.provider.MediaStore;
 import android.support.annotation.Nullable;
+import android.support.design.widget.FloatingActionButton;
+import android.support.v4.content.FileProvider;
+import android.support.v4.print.PrintHelper;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Base64;
 import android.util.Log;
@@ -17,6 +26,7 @@ import com.bumptech.glide.Glide;
 import com.example.root.ikure.pojo.earthquakeModel.ShowTheEcg;
 import com.example.root.ikure.rest.ApiClient;
 import com.example.root.ikure.rest.ApiInterface;
+import com.example.root.ikure.rest.DownloadInterface;
 //import com.github.barteksc.pdfviewer.PDFView;
 //import com.github.barteksc.pdfviewer.util.FitPolicy;
 
@@ -27,6 +37,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.util.List;
 
 import okhttp3.ResponseBody;
 import retrofit2.Call;
@@ -41,12 +52,15 @@ public class DisplayEcgActivity extends AppCompatActivity {
     Intent i;
     String id;
     ProgressDialog progressDialog;
-    File ecgpdf;
+    public File ecgpdf;
     //PDFView pdfView;
     ImageView imageView;
-    Button save;
+    Button save,print;
+
     byte[] imageByteArray;
     String timestamp;
+    String downurl;
+    FloatingActionButton floatingActionButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,31 +70,24 @@ public class DisplayEcgActivity extends AppCompatActivity {
         id = i.getStringExtra("id");
         imageView = (ImageView)findViewById(R.id.pdfView);
         save =  (Button)findViewById(R.id.save);
+       floatingActionButton = (FloatingActionButton)findViewById(R.id.fab);
         save.setVisibility(View.INVISIBLE);
         save.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                ecgpdf = new File(getExternalFilesDir(null) + File.separator + "EcgReports"+timestamp+".jpeg");
-                BufferedOutputStream bos = null;
-                try {
-                    bos = new BufferedOutputStream(new FileOutputStream(ecgpdf));
-                    bos.write(imageByteArray);
-                    bos.flush();
-                    bos.close();
-                    Toast.makeText(DisplayEcgActivity.this, "Saved Successfully", Toast.LENGTH_SHORT).show();
-                    Intent intent = new Intent();
-                    intent.setAction(Intent.ACTION_VIEW);
-                    intent.setDataAndType(Uri.fromFile(ecgpdf), "image/*");
-                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                    startActivity(intent);
-                } catch (IOException e) {
-                    e.printStackTrace();
-                    Toast.makeText(DisplayEcgActivity.this, "Couldn't Save", Toast.LENGTH_SHORT).show();
-                }
-
+                downloadthefile(downurl,timestamp);
             }
         });
         //Toast.makeText(DisplayEcgActivity.this, id, Toast.LENGTH_LONG).show();
+        floatingActionButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                downloadandprint(downurl,timestamp);
+
+            }
+        });
+
+
         init();
     }
 
@@ -114,12 +121,12 @@ public class DisplayEcgActivity extends AppCompatActivity {
                 }
                 else{
                     progressDialog.dismiss();
+                    downurl = response.body().getEcgUrl();
                     timestamp = response.body().getTimestamp();
-                    imageByteArray = Base64.decode(response.body().getEcgUrl(), Base64.DEFAULT);
+                    //imageByteArray = Base64.decode(response.body().getEcgUrl(), Base64.DEFAULT);
 
                     Glide.with(getBaseContext())
-                            .load(imageByteArray)
-                            .asBitmap()
+                            .load(response.body().getEcgUrl())
                             .placeholder(R.drawable.ikurelogo)
                             .into(imageView);
                         save.setVisibility(View.VISIBLE);
@@ -136,8 +143,135 @@ public class DisplayEcgActivity extends AppCompatActivity {
         });
     }
 
+    public void downloadandprint(String url ,final String timestamp){
+        progressDialog.show();
+        DownloadInterface apiService = ApiClient.getClient().create(DownloadInterface.class);
+        Call<ResponseBody> call = apiService.downloadFileWithDynamicUrlSync(url);
+        call.enqueue(new Callback<ResponseBody>() {
+            @Override
+            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                progressDialog.dismiss();
+                if(response.isSuccessful()){
+                    boolean writtenToDisk = writeResponseBodyToDisk(response.body(), timestamp);
+                    if(writtenToDisk){
+                        //Toast.makeText(DisplayEcgActivity.this,"We code hard in this cubicles",Toast.LENGTH_LONG).show();
+                        PrintHelper photoPrinter = new PrintHelper(getBaseContext());
+                        photoPrinter.setScaleMode(PrintHelper.SCALE_MODE_FIT);
+                        Bitmap bitmap = BitmapFactory.decodeFile(ecgpdf.getAbsolutePath());
+                        photoPrinter.printBitmap("droids.jpg - test print", bitmap);
+
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ResponseBody> call, Throwable t) {
+                progressDialog.dismiss();
+                bullshit();
+            }
+        });
+    }
 
 
+
+    public void downloadthefile(String url, final String timestamp){
+        progressDialog.show();
+        DownloadInterface apiService = ApiClient.getClient().create(DownloadInterface.class);
+        Call<ResponseBody> call = apiService.downloadFileWithDynamicUrlSync(url);
+
+        call.enqueue(new Callback<ResponseBody>() {
+            @Override
+            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                if(response.isSuccessful()){
+                    boolean writtenToDisk = writeResponseBodyToDisk(response.body(),timestamp);
+                    if(writtenToDisk){
+                        //renderToScreen();
+                        Uri photoURI = FileProvider.getUriForFile(getBaseContext(), getBaseContext().getApplicationContext().getPackageName() + ".com.example.root.ikure.provider", ecgpdf);
+
+                        Intent intent = new Intent();
+                        intent.setAction(Intent.ACTION_VIEW);
+                        intent.setDataAndType(photoURI, "image/*");
+                        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                        intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+                        startActivity(intent);
+
+                    }
+                }
+                else{
+                    bullshit();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ResponseBody> call, Throwable t) {
+                Toast.makeText(DisplayEcgActivity.this,"File cannot be downloaded",Toast.LENGTH_LONG).show();
+            }
+        });
+    }
+
+    private boolean writeResponseBodyToDisk(ResponseBody body, String timestamp) {
+        try {
+
+
+            // todo change the file location/name according to your needs
+            ecgpdf = new File(getExternalFilesDir(null) + File.separator + "ECGReports"+timestamp+".jpeg");
+
+            InputStream inputStream = null;
+            OutputStream outputStream = null;
+
+            try {
+                byte[] fileReader = new byte[8192];
+
+                long fileSize = body.contentLength();
+                long fileSizeDownloaded = 0;
+
+                inputStream = body.byteStream();
+                outputStream = new FileOutputStream(ecgpdf);
+                progressDialog.dismiss();
+                while (true) {
+                    int read = inputStream.read(fileReader);
+
+                    if (read == -1) {
+                        break;
+                    }
+
+                    outputStream.write(fileReader, 0, read);
+
+                    fileSizeDownloaded += read;
+
+                    Log.d(String.valueOf(this), "file download: " + fileSizeDownloaded + " of " + fileSize);
+                }
+
+                outputStream.flush();
+
+                return true;
+            } catch (IOException e) {
+                return false;
+            } finally {
+                if (inputStream != null) {
+                    inputStream.close();
+                }
+
+                if (outputStream != null) {
+                    outputStream.close();
+                }
+            }
+        } catch (IOException e) {
+            return false;
+        }
+
+    }
+
+    private String getFileDestinationPath(){
+        String generatedFilename = String.valueOf(System.currentTimeMillis());
+        String filePathEnvironment = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).getAbsolutePath();
+        File directoryFolder = new File(filePathEnvironment + "/pictures/");
+        if(!directoryFolder.exists()){
+            directoryFolder.mkdir();
+        }
+        //Log.d(TAG, "Full path " + filePathEnvironment + "/video/" + generatedFilename + ".mp4");
+        return filePathEnvironment + "/pictures/" + generatedFilename + ".jpeg";
+    }
 
 
 

@@ -29,7 +29,7 @@ import retrofit2.Response;
  */
 
 public class OnePerson extends AppCompatActivity {
-    Button ecg,prescriptions;
+    Button ecg,prescriptions,vitals;
     String image;
     Bitmap imageBitmap;
     //Button upload_server;
@@ -48,6 +48,7 @@ public class OnePerson extends AppCompatActivity {
         pos = i.getStringExtra("patient");
         ecg = (Button)findViewById(R.id.ecg);
         prescriptions = (Button)findViewById(R.id.pres);
+        vitals = (Button)findViewById(R.id.vitals);
         imageView = (ImageView)findViewById(R.id.patient_image);
         name = (TextView)findViewById(R.id.pa_name);
         age = (TextView)findViewById(R.id.pa_age);
@@ -66,6 +67,15 @@ public class OnePerson extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Intent i = new Intent(OnePerson.this,PrescriptionActivity.class);
+                i.putExtra("resources",pos);
+                startActivity(i);
+
+            }
+        });
+        vitals.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent i = new Intent(OnePerson.this,VitalsActivity.class);
                 i.putExtra("resources",pos);
                 startActivity(i);
 

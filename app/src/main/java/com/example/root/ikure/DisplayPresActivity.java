@@ -2,10 +2,16 @@ package com.example.root.ikure;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
+import android.support.v4.content.FileProvider;
+import android.support.v4.print.PrintHelper;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Base64;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -16,12 +22,16 @@ import com.example.root.ikure.pojo.earthquakeModel.PresListDetail;
 import com.example.root.ikure.pojo.earthquakeModel.ShowTheImage;
 import com.example.root.ikure.rest.ApiClient;
 import com.example.root.ikure.rest.ApiInterface;
+import com.example.root.ikure.rest.DownloadInterface;
 
 import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 
+import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -35,10 +45,13 @@ public class DisplayPresActivity extends AppCompatActivity {
     String id;
     ImageView img;
     ProgressDialog progressDialog;
-    Button save;
-    File prespdf;
+    Button save,print;
+    public File prespdf;
+    public String downurl;
     byte[] imageByteArray;
+    boolean what_do_you_want_to_do =false;
     String timestamp;
+    FloatingActionButton floatingActionButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,30 +61,25 @@ public class DisplayPresActivity extends AppCompatActivity {
         id = i.getStringExtra("img");
         img = (ImageView)findViewById(R.id.showimg);
         save = (Button)findViewById(R.id.save);
+
         save.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                prespdf = new File(getExternalFilesDir(null) + File.separator + "PrescriptionReports"+timestamp+".jpeg");
-                BufferedOutputStream bos = null;
-                try {
-                    bos = new BufferedOutputStream(new FileOutputStream(prespdf));
-                    bos.write(imageByteArray);
-                    bos.flush();
-                    bos.close();
-                    Toast.makeText(DisplayPresActivity.this, "Saved Successfully", Toast.LENGTH_SHORT).show();
-                    Intent intent = new Intent();
-                    intent.setAction(Intent.ACTION_VIEW);
-                    intent.setDataAndType(Uri.fromFile(prespdf), "image/*");
-                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                    startActivity(intent);
-                } catch (IOException e) {
-                    e.printStackTrace();
-                    Toast.makeText(DisplayPresActivity.this, "Couldn't Save", Toast.LENGTH_SHORT).show();
+                downloadthefile(downurl,timestamp);
                 }
+
+
+        });
+        //Toast.makeText(DisplayPresActivity.this, id, Toast.LENGTH_LONG).show();
+        floatingActionButton = (FloatingActionButton)findViewById(R.id.fab);
+        floatingActionButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                downloadandprint(downurl,timestamp);
 
             }
         });
-        //Toast.makeText(DisplayPresActivity.this, id, Toast.LENGTH_LONG).show();
+
         init();
 
     }
@@ -98,6 +106,8 @@ public class DisplayPresActivity extends AppCompatActivity {
         ApiInterface apiService = ApiClient.getClient().create(ApiInterface.class);
         Call<ShowTheImage> call = apiService.getDetails4(id);
         call.enqueue(new Callback<ShowTheImage>() {
+
+
             @Override
             public void onResponse(Call<ShowTheImage> call, Response<ShowTheImage> response) {
                 if(response.body().getError()){
@@ -110,11 +120,11 @@ public class DisplayPresActivity extends AppCompatActivity {
                 }
 
                 else{
-                    imageByteArray = Base64.decode(response.body().getPrescriptionImage(), Base64.DEFAULT);
+                    //imageByteArray = Base64.decode(response.body().getPrescriptionImage(), Base64.DEFAULT);
+                    downurl = response.body().getPrescriptionImage();
                     timestamp = response.body().getTimestamp();
                     Glide.with(getBaseContext())
-                            .load(imageByteArray)
-                            .asBitmap()
+                            .load(response.body().getPrescriptionImage())
                             .placeholder(R.drawable.ikurelogo)
                             .into(img);
                     progressDialog.dismiss();
@@ -128,6 +138,129 @@ public class DisplayPresActivity extends AppCompatActivity {
                 bullshit();
             }
         });
+
+    }
+
+
+    public void downloadandprint(String url ,final String timestamp){
+        progressDialog.show();
+        DownloadInterface apiService = ApiClient.getClient().create(DownloadInterface.class);
+        Call<ResponseBody> call = apiService.downloadFileWithDynamicUrlSync(url);
+        call.enqueue(new Callback<ResponseBody>() {
+            @Override
+            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                progressDialog.dismiss();
+                if(response.isSuccessful()){
+                    boolean writtenToDisk = writeResponseBodyToDisk(response.body(), timestamp);
+                    if(writtenToDisk){
+                        //Toast.makeText(DisplayEcgActivity.this,"We code hard in this cubicles",Toast.LENGTH_LONG).show();
+                        PrintHelper photoPrinter = new PrintHelper(getBaseContext());
+                        photoPrinter.setScaleMode(PrintHelper.SCALE_MODE_FIT);
+                        Bitmap bitmap = BitmapFactory.decodeFile(prespdf.getAbsolutePath());
+                        photoPrinter.printBitmap("droids.jpg - test print", bitmap);
+
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ResponseBody> call, Throwable t) {
+                progressDialog.dismiss();
+                bullshit();
+            }
+        });
+    }
+
+
+
+
+
+
+
+
+
+    public void downloadthefile(String url, final String timestamp){
+        progressDialog.show();
+        DownloadInterface apiService = ApiClient.getClient().create(DownloadInterface.class);
+        Call<ResponseBody> call = apiService.downloadFileWithDynamicUrlSync(url);
+
+        call.enqueue(new Callback<ResponseBody>() {
+            @Override
+            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                if(response.isSuccessful()){
+                    boolean writtenToDisk = writeResponseBodyToDisk(response.body(),timestamp);
+                    if(writtenToDisk){
+                        //renderToScreen();
+                        Intent intent = new Intent();
+                        intent.setAction(Intent.ACTION_VIEW);
+                        Uri photoURI = FileProvider.getUriForFile(getBaseContext(), getBaseContext().getApplicationContext().getPackageName() + ".com.example.root.ikure.provider", prespdf);
+                        intent.setDataAndType(photoURI, "image/*");
+                        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                        intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+                        startActivity(intent);
+
+                    }
+                }
+                else{
+                    bullshit();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ResponseBody> call, Throwable t) {
+                Toast.makeText(DisplayPresActivity.this,"File cannot be downloaded",Toast.LENGTH_LONG).show();
+            }
+        });
+    }
+
+    private boolean writeResponseBodyToDisk(ResponseBody body, String timestamp) {
+        try {
+            // todo change the file location/name according to your needs
+            prespdf = new File(getExternalFilesDir(null) + File.separator + "PrescriptionReports"+timestamp+".jpeg");
+
+            InputStream inputStream = null;
+            OutputStream outputStream = null;
+
+            try {
+                byte[] fileReader = new byte[8192];
+
+                long fileSize = body.contentLength();
+                long fileSizeDownloaded = 0;
+
+                inputStream = body.byteStream();
+                outputStream = new FileOutputStream(prespdf);
+                progressDialog.dismiss();
+                while (true) {
+                    int read = inputStream.read(fileReader);
+
+                    if (read == -1) {
+                        break;
+                    }
+
+                    outputStream.write(fileReader, 0, read);
+
+                    fileSizeDownloaded += read;
+
+                    Log.d(String.valueOf(this), "file download: " + fileSizeDownloaded + " of " + fileSize);
+                }
+
+                outputStream.flush();
+
+                return true;
+            } catch (IOException e) {
+                return false;
+            } finally {
+                if (inputStream != null) {
+                    inputStream.close();
+                }
+
+                if (outputStream != null) {
+                    outputStream.close();
+                }
+            }
+        } catch (IOException e) {
+            return false;
+        }
 
     }
 }
