@@ -6,9 +6,11 @@
     <color name="colorHeader2">#6fc652</color>
     <color name="colorHeader3">#5db651</color>
     <color name="colorHeader">#adc652</color>
-    <color name="colorback">#faf7ed</color>
+    <color name="colorback">#f4c424</color>
     <color name="colorback1">#F07818</color>
     <color name="colorback2">#F0A830</color>
-    <color name="colorback3">#523d1f</color>
+    <color name="colorred">#d74e4e</color>
+    <color name="colorlightyellow">#f5cb4d</color>
+
 
 </resources>

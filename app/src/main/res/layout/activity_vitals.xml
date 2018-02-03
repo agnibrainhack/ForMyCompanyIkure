@@ -6,7 +6,7 @@
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="List Of ECG Reports"
+        android:text="List Of Vital Reports"
         android:textSize="24sp"
         android:gravity="center_horizontal"
         android:textStyle="bold"

@@ -1,17 +1,18 @@
 package com.example.root.ikure.rest;
 
 import com.example.root.ikure.pojo.earthquakeModel.CardDetails;
+import com.example.root.ikure.pojo.earthquakeModel.DifferentVitals;
 import com.example.root.ikure.pojo.earthquakeModel.EcgListDetail;
 import com.example.root.ikure.pojo.earthquakeModel.PatientDetails;
 import com.example.root.ikure.pojo.earthquakeModel.PresListDetail;
 import com.example.root.ikure.pojo.earthquakeModel.ShowTheEcg;
 import com.example.root.ikure.pojo.earthquakeModel.ShowTheImage;
+import com.example.root.ikure.pojo.earthquakeModel.SugarDetail;
+import com.example.root.ikure.pojo.earthquakeModel.VitalTime;
 
-import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.http.GET;
 import retrofit2.http.Query;
-import retrofit2.http.Url;
 
 //import com.example.root.ikure.pojo.earthquakeModel.Earthquake;
 
@@ -38,6 +39,16 @@ public interface ApiInterface {
 
     @GET("ecg/ecgdetails")
     Call<ShowTheEcg> getDetails6(@Query("id") String pid);
+
+    @GET("vital/vitallist")
+    Call<VitalTime> getDetails7(@Query("pid") String pid);
+
+    @GET("vital/vitaldetails")
+    Call<DifferentVitals> getDetails8(@Query("pid") String pid,
+                                     @Query("timestamp") String timestamp);
+
+    @GET("vital/sugarlist")
+    Call<SugarDetail> getDetails9(@Query("pid") String pid);
 
 
 

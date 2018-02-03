@@ -4,7 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.example.root.ikure.MainActivity">
+    tools:context="com.example.root.ikure.MainActivity"
+    android:background="#FFFFFF">
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
@@ -13,62 +14,52 @@
             android:id="@+id/serve"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/image"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true"
+            android:background="#4793fd"
             android:gravity="center_horizontal"
+            android:padding="8dp"
             android:text="Patient Details"
-            android:textColor="#000000"
+            android:textColor="#FFFFFF"
             android:textSize="32sp"
-            android:textStyle="bold"
-            android:layout_marginTop="8dp"
-            android:padding="8dp"/>
+            android:textStyle="bold" />
         <ImageView
             android:layout_width="match_parent"
             android:layout_height="200dp"
             android:id="@+id/patient_image"
             android:layout_below="@id/serve"
-            android:layout_margin="8dp"/>
+            android:padding="8dp"
+
+            android:background="@color/colorPrimary"/>
+
+        <TextView
+            android:id="@+id/pa_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:layout_below="@+id/patient_image"
+            android:background="@color/colorPrimary"
+            android:paddingLeft="40dp"
+            android:hint="Name here"
+            android:paddingTop="4dp"
+            android:textColor="#FFFFFF"
+            android:textSize="30sp" />
 
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/patient_image"
-            android:id="@+id/linear"
-            android:layout_marginTop="20dp"
+            android:layout_below="@+id/pa_name"
+            android:id="@+id/linear1"
+            android:layout_marginTop="40dp"
+            android:layout_marginLeft="40dp"
             >
-        <TextView
-            android:layout_width="100dp"
-            android:layout_height="wrap_content"
-            android:text="Name:"
-            android:textSize="24sp"
-            android:layout_marginTop="16dp"
-            android:textStyle="bold"
-            android:id="@+id/name"
-            android:layout_marginRight="8dp"
-            android:layout_marginLeft="8dp"/>
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:hint="Name here"
-            android:textSize="24sp"
-            android:id="@+id/pa_name"
-            android:layout_marginLeft="8dp"
-            android:layout_marginTop="16dp"
-            android:textStyle="bold"
-            android:textColor="@color/colorPrimaryDark"
-            android:layout_toRightOf="@+id/name" />
-        </LinearLayout>
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/linear"
-            android:id="@+id/linear1">
             <TextView
                 android:layout_width="100dp"
                 android:layout_height="wrap_content"
                 android:text="AGE:"
-                android:textSize="24sp"
+                android:textSize="20sp"
                 android:layout_marginTop="16dp"
-                android:textStyle="bold"
+
                 android:id="@+id/pid"
                 android:layout_marginRight="8dp"
                 android:layout_marginLeft="8dp"/>
@@ -76,20 +67,21 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:hint="ID here"
-                android:textColor="@color/colorPrimary"
+                android:textColor="#000000"
                 android:id="@+id/pa_age"
-                android:textSize="24sp"
+                android:textSize="20sp"
 
                 android:layout_marginLeft="8dp"
                 android:layout_marginTop="16dp"
-                android:textStyle="bold"
+
                  />
         </LinearLayout>
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@+id/linear1"
-            android:id="@+id/linear2">
+            android:id="@+id/linear2"
+            android:layout_marginLeft="40dp">
 
             <TextView
                 android:id="@+id/services"
@@ -99,8 +91,8 @@
                 android:layout_marginRight="8dp"
                 android:layout_marginTop="16dp"
                 android:text="Phone :"
-                android:textSize="24sp"
-                android:textStyle="bold" />
+                android:textSize="20sp"
+                 />
 
             <TextView
                 android:id="@+id/pa_reg"
@@ -110,43 +102,21 @@
                 android:layout_marginTop="16dp"
                 android:layout_marginBottom="2dp"
                 android:layout_toRightOf="@+id/name"
-                android:hint="Last Service here"
-                android:textColor="@color/colorPrimary"
+                android:hint="Phone Number here"
+                android:textColor="#000000"
                 android:textSize="20sp"
-                android:textStyle="bold" />
+                 />
         </LinearLayout>
 
-        <LinearLayout
-            android:layout_width="match_parent"
+
+        <com.nightonke.boommenu.BoomMenuButton
+            android:id="@+id/bmb"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@id/linear2"
-            android:layout_marginTop="70dp">
-            <Button
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="ECG Reports"
-                android:background="@color/colorback1"
-                android:textSize="12sp"
-                android:padding="2dp"
-                android:id="@+id/ecg"/>
-            <Button
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:textSize="12sp"
-                android:text="prescriptions"
-                android:id="@+id/pres"
-                android:background="@color/colorback3"/>
-            <Button
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:textSize="12sp"
-                android:text="Vitals"
-                android:id="@+id/vitals"
-                android:background="@color/colorback2"/>
 
-        </LinearLayout>
+            android:layout_below="@+id/linear2"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="59dp" />
+
     </RelativeLayout>
 </ScrollView>

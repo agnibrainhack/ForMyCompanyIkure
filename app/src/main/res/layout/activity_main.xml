@@ -5,7 +5,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:id="@+id/key"
-    tools:context="com.example.root.ikure.MainActivity">
+    tools:context="com.example.root.ikure.MainActivity"
+    android:background="#FFFFFF">
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
