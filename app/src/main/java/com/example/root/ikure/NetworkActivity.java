@@ -53,6 +53,7 @@ public class NetworkActivity extends AppCompatActivity implements View.OnClickLi
         Intent i = getIntent();
         patient = i.getStringExtra("Patient_no");
          card_no = (TextView)findViewById(R.id.serve1);
+        card_no.setText(patient);
         //Toast.makeText(this, patient, Toast.LENGTH_LONG).show();
         //retrofitRepository = new RetrofitRepository();
         //callAPI();

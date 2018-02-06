@@ -1,72 +1,72 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical">
     <TextView
+        android:id="@+id/header"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_margin="8dp"
+        android:gravity="center_horizontal"
         android:text="Blood Sucrose Level Reports"
         android:textSize="24sp"
-        android:gravity="center_horizontal"
-        android:textStyle="bold"
-        android:layout_margin="8dp"
-        android:id="@+id/header"/>
+        android:textStyle="bold" />
     <LinearLayout
+        android:id="@+id/types"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/header"
-        android:id="@+id/types"
         android:layout_marginLeft="16dp"
         android:layout_marginRight="16dp">
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
             android:text="Fasting"
-            android:layout_weight="1"
-            android:gravity="center"
             android:textSize="18sp"/>
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
             android:text=" PP"
-            android:layout_weight="1"
-            android:gravity="center"
             android:textSize="18sp"/>
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Random"
             android:layout_weight="1"
             android:gravity="center"
+            android:text="Random"
             android:textSize="18sp"/>
     </LinearLayout>
     <ListView
+        android:id="@+id/list_of_sugar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/types"
-        android:id="@+id/list_of_sugar"
         android:divider="@null"
         android:dividerHeight="0dp"
         >
 
     </ListView>
     <android.support.design.widget.FloatingActionButton
+        android:id="@+id/floating"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
         android:layout_alignEnd="@+id/header"
+        android:layout_alignParentBottom="true"
         android:layout_marginBottom="53dp"
         android:layout_marginEnd="30dp"
-        android:id="@+id/floating"
-
+        android:scaleType="fitXY"
+        android:src="@drawable/graph"
         app:backgroundTint="#e91b1b"
         app:borderWidth="0dp"
         app:elevation="6dp"
         app:fabSize="normal"
-        android:scaleType="fitXY"
         />
 
 

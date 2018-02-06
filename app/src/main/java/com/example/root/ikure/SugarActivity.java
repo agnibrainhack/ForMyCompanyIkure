@@ -30,11 +30,18 @@ import retrofit2.Response;
 public class SugarActivity extends AppCompatActivity {
 
     String pid;
+    FloatingActionButton floatingActionButton;
+    String[] diab_fasting;
+    String[] diab_fasting_date;
+    String[] diab_pp;
+    String[] diab_pp_date;
+    String[] diab_random;
+    String[] diab_random_date;
+    int k1, k2, k3;
     private ProgressDialog progressDialog;
     private ListView SugarListView;
     private ArrayList<Data_class_four> dy = new ArrayList<Data_class_four>();
     private SugarAdapter sugarAdapter;
-    FloatingActionButton floatingActionButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,10 +51,19 @@ public class SugarActivity extends AppCompatActivity {
         pid = i.getStringExtra("resources");
         //Toast.makeText(SugarActivity.this, pid, Toast.LENGTH_LONG).show();
         floatingActionButton = findViewById(R.id.floating);
+        k1 = k2 = k3 = 0;
         floatingActionButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent k = new Intent(SugarActivity.this, DiabetesGraphActivity.class);
+                k.putExtra("pid", pid);
+                k.putExtra("fasting", diab_fasting);
+                k.putExtra("fasting_date", diab_fasting_date);
+                k.putExtra("pp", diab_pp);
+                k.putExtra("pp_date", diab_pp_date);
+                k.putExtra("random", diab_random);
+                k.putExtra("random_date", diab_random_date);
+
                 startActivity(k);
             }
         });
@@ -91,6 +107,23 @@ public class SugarActivity extends AppCompatActivity {
                                         result.body().getSugarlist().get(i).getSugarPp(),
                                         result.body().getSugarlist().get(i).getSugarRandom(),
                                         convert(result.body().getSugarlist().get(i).getTimestamp())));
+
+                                if (result.body().getSugarlist().get(i).getSugarFirst() != "NA") {
+                                    diab_fasting[k1] = result.body().getSugarlist().get(i).getSugarFirst();
+                                    diab_fasting_date[k1] = result.body().getSugarlist().get(i).getTimestamp();
+                                    k1++;
+                                }
+                                if (result.body().getSugarlist().get(i).getSugarFirst() != "NA") {
+                                    diab_pp[k2] = result.body().getSugarlist().get(i).getSugarFirst();
+                                    diab_pp_date[k2] = result.body().getSugarlist().get(i).getTimestamp();
+                                    k2++;
+                                }
+                                if (result.body().getSugarlist().get(i).getSugarFirst() != "NA") {
+                                    diab_random[k3] = result.body().getSugarlist().get(i).getSugarFirst();
+                                    diab_random_date[k3] = result.body().getSugarlist().get(i).getTimestamp();
+                                    k3++;
+                                }
+
                             }
                             sugarAdapter = new SugarAdapter(getBaseContext(), dy);
 
