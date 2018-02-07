@@ -1,11 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
+<ScrollView
     xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/trends"
+
     android:orientation="vertical">
 
-
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/trends"
+        android:orientation="vertical">
     <com.github.mikephil.charting.charts.BarChart
 
         android:id="@+id/chart"
@@ -13,4 +17,19 @@
         android:layout_height="400dp"
         android:layout_marginTop="168dp" />
 
-</LinearLayout>
+        <com.github.mikephil.charting.charts.BarChart
+
+            android:id="@+id/chart2"
+            android:layout_width="match_parent"
+            android:layout_height="400dp"
+            android:layout_marginTop="8dp" />
+
+        <com.github.mikephil.charting.charts.BarChart
+
+            android:id="@+id/chart3"
+            android:layout_width="match_parent"
+            android:layout_height="400dp"
+            android:layout_marginTop="8dp" />
+
+    </LinearLayout>
+</ScrollView>

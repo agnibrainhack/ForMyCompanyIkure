@@ -41,34 +41,33 @@ import retrofit2.Response;
  */
 
 public class DiabetesGraphActivity  extends AppCompatActivity{
-    ArrayList<String> diab_fasting = new ArrayList<>();
-    ArrayList<String> diab_fasting_date = new ArrayList<>();
-    ArrayList<String> diab_pp = new ArrayList<>();
-    ArrayList<String> diab_pp_date = new ArrayList<>();
-    ArrayList<String> diab_random = new ArrayList<>();
-    ArrayList<String> diab_random_date = new ArrayList<>();
-
-
-    ArrayList<Float> reverse_fasting_date = new ArrayList<>();
-    ArrayList<Float> reverse_pp_date = new ArrayList<>();
-    ArrayList<Float> reverse_random_date = new ArrayList<>();
-
-    ArrayList<Float> reverse_fasting = new ArrayList<>();
-    ArrayList<Float> reverse_pp = new ArrayList<>();
-    ArrayList<Float> reverse_random = new ArrayList<>();
 
 
     int k1, k2, k3;
     PassingThrough passingThrough;
     TextView txt;
     float[] floatArray;
-    BarChart chart;
+    BarChart chart, chart2, chart3;
     ArrayList<BarEntry> BARENTRY;
     ArrayList<String> BarEntryLabels;
     BarDataSet Bardataset;
     BarData BARDATA;
+    String fasting[] = new String[5];
+    float f1, f2, f3, f4, f5;
+    float p1, p2, p3, p4, p5;
+    float r1, r2, r3, r4, r5;
     private ProgressDialog progressDialog;
     private String pid;
+    private ArrayList<BarEntry> BARENTRY2;
+    private BarDataSet Bardataset2;
+    private BarData BARDATA2;
+    private String[] pp = new String[5];
+    private String[] random = new String[5];
+    private ArrayList<BarEntry> BARENTRY3;
+    private BarDataSet Bardataset3;
+    private BarData BARDATA3;
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -77,88 +76,139 @@ public class DiabetesGraphActivity  extends AppCompatActivity{
         Intent i = getIntent();
         pid = i.getStringExtra("pid");
 
-        passingThrough = (PassingThrough) i.getSerializableExtra("data");
-        diab_fasting = i.getStringArrayListExtra("fasting");
-        diab_fasting_date = i.getStringArrayListExtra("fasting_date");
-        diab_pp = i.getStringArrayListExtra("pp");
-        diab_pp_date = i.getStringArrayListExtra("pp_date");
-        diab_random = i.getStringArrayListExtra("random");
-        diab_random_date = i.getStringArrayListExtra("random_date");
+        fasting = i.getStringArrayExtra("fasting");
+        pp = i.getStringArrayExtra("pp");
+        random = i.getStringArrayExtra("random");
 
-        StringBuilder str = new StringBuilder(" ");
-        for (int v = 0; v < diab_fasting_date.size(); v++) {
-            reverse_fasting_date.add(v, Float.parseFloat(diab_fasting_date.get(v)));
-            //str.append(reverse_fasting_date.get(v));
-
-        }
-
-
-        for (int v = 0; v < diab_pp_date.size(); v++) {
-            reverse_pp_date.add(v, Float.parseFloat(diab_pp_date.get(v)));
-        }
-        for (int v = 0; v < diab_random_date.size(); v++) {
-            reverse_random_date.add(v, Float.parseFloat(diab_random_date.get(v)));
-        }
-
-        for (int v = 0; v < diab_random.size(); v++) {
-            reverse_random.add(v, Float.parseFloat(diab_random.get(v)));
-        }
-
-        for (int v = 0; v < diab_pp.size(); v++) {
-            reverse_pp.add(v, Float.parseFloat(diab_pp.get(v)));
-        }
-
-        for (int v = 0; v < diab_fasting.size(); v++) {
-            reverse_fasting.add(v, Float.parseFloat(diab_fasting.get(v)));
-        }
+        if (fasting[0] != null)
+            f1 = Float.parseFloat(fasting[0]);
+        else
+            f1 = 0;
+        if (fasting[1] != null)
+            f2 = Float.parseFloat(fasting[1]);
+        else
+            f2 = 0;
+        if (fasting[2] != null)
+            f3 = Float.parseFloat(fasting[2]);
+        else
+            f3 = 0;
+        if (fasting[3] != null)
+            f4 = Float.parseFloat(fasting[3]);
+        else
+            f4 = 0;
+        if (fasting[4] != null)
+            f5 = Float.parseFloat(fasting[4]);
+        else
+            f5 = 0;
 
 
-        Collections.reverse(reverse_fasting_date);
-        Collections.reverse(reverse_pp_date);
-        Collections.reverse(reverse_random_date);
-        Collections.reverse(reverse_random);
-        Collections.reverse(reverse_pp);
-        Collections.reverse(reverse_fasting);
+        if (pp[0] != null)
+            p1 = Float.parseFloat(pp[0]);
+        else
+            p1 = 0;
+        if (pp[1] != null)
+            p2 = Float.parseFloat(pp[1]);
+        else
+            p2 = 0;
+        if (pp[2] != null)
+            p3 = Float.parseFloat(pp[2]);
+        else
+            p3 = 0;
+        if (pp[3] != null)
+            p4 = Float.parseFloat(pp[3]);
+        else
+            p4 = 0;
+        if (pp[4] != null)
+            p5 = Float.parseFloat(pp[4]);
+        else
+            p5 = 0;
+
+
+        if (random[0] != null)
+            r1 = Float.parseFloat(random[0]);
+        else
+            r1 = 0;
+        if (random[1] != null)
+            r2 = Float.parseFloat(random[1]);
+        else
+            r2 = 0;
+        if (random[2] != null)
+            r3 = Float.parseFloat(random[2]);
+        else
+            r3 = 0;
+        if (random[3] != null)
+            r4 = Float.parseFloat(random[3]);
+        else
+            r4 = 0;
+        if (random[4] != null)
+            r5 = Float.parseFloat(random[4]);
+        else
+            r5 = 0;
 
 
         k1 = k2 = k3 = 0;
-        floatArray = new float[reverse_fasting.size()];
+
 
 
         chart = (BarChart) findViewById(R.id.chart);
-
         BARENTRY = new ArrayList<>();
-
         BarEntryLabels = new ArrayList<String>();
-
-        AddValuesToBARENTRY();
-
+        AddValuesToBARENTRYforFasting();
         AddValuesToBarEntryLabels();
-
-        Bardataset = new BarDataSet(BARENTRY, "Projects");
-
+        Bardataset = new BarDataSet(BARENTRY, "Fasting Trends");
         BARDATA = new BarData(BarEntryLabels, Bardataset);
-
         Bardataset.setColors(ColorTemplate.COLORFUL_COLORS);
-
         chart.setData(BARDATA);
-
         chart.animateY(3000);
 
 
+        chart2 = findViewById(R.id.chart2);
+        BARENTRY2 = new ArrayList<>();
+        AddValuesToBARENTRYforPP();
+        Bardataset2 = new BarDataSet(BARENTRY2, "PP Trends");
+        BARDATA2 = new BarData(BarEntryLabels, Bardataset2);
+        Bardataset2.setColors(ColorTemplate.COLORFUL_COLORS);
+        chart2.setData(BARDATA2);
+        chart2.animateY(3000);
+
+
+        chart3 = findViewById(R.id.chart3);
+        BARENTRY3 = new ArrayList<>();
+        AddValuesToBARENTRYforrandom();
+        Bardataset3 = new BarDataSet(BARENTRY3, "Random Trends");
+        BARDATA3 = new BarData(BarEntryLabels, Bardataset3);
+        Bardataset3.setColors(ColorTemplate.COLORFUL_COLORS);
+        chart3.setData(BARDATA3);
+        chart3.animateY(3000);
 
     }
 
+    private void AddValuesToBARENTRYforrandom() {
+        BARENTRY3.add(new BarEntry(r1, 0));
+        BARENTRY3.add(new BarEntry(r2, 1));
+        BARENTRY3.add(new BarEntry(r3, 2));
+        BARENTRY3.add(new BarEntry(r4, 3));
+        BARENTRY3.add(new BarEntry(r5, 4));
+    }
 
-    public void AddValuesToBARENTRY() {
-        float x1 = 19f;
+    private void AddValuesToBARENTRYforPP() {
+        BARENTRY2.add(new BarEntry(p1, 0));
+        BARENTRY2.add(new BarEntry(p2, 1));
+        BARENTRY2.add(new BarEntry(p3, 2));
+        BARENTRY2.add(new BarEntry(p4, 3));
+        BARENTRY2.add(new BarEntry(p5, 4));
+    }
 
-        BARENTRY.add(new BarEntry(x1, 0));
-        BARENTRY.add(new BarEntry(4f, 1));
-        BARENTRY.add(new BarEntry(6f, 2));
-        BARENTRY.add(new BarEntry(8f, 3));
-        BARENTRY.add(new BarEntry(7f, 4));
-        BARENTRY.add(new BarEntry(3f, 5));
+
+    public void AddValuesToBARENTRYforFasting() {
+
+
+        BARENTRY.add(new BarEntry(f1, 0));
+        BARENTRY.add(new BarEntry(f2, 1));
+        BARENTRY.add(new BarEntry(f3, 2));
+        BARENTRY.add(new BarEntry(f4, 3));
+        BARENTRY.add(new BarEntry(f5, 4));
+
 
     }
 
