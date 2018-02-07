@@ -50,6 +50,7 @@
         android:layout_below="@+id/types"
         android:divider="@null"
         android:dividerHeight="0dp"
+
         >
 
     </ListView>

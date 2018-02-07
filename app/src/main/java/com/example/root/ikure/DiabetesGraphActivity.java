@@ -12,17 +12,25 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.root.ikure.pojo.earthquakeModel.SugarDetail;
 import com.example.root.ikure.rest.ApiClient;
 import com.example.root.ikure.rest.ApiInterface;
-import com.jjoe64.graphview.GraphView;
-import com.jjoe64.graphview.series.DataPoint;
-import com.jjoe64.graphview.series.LineGraphSeries;
+import com.github.mikephil.charting.charts.BarChart;
+import com.github.mikephil.charting.data.BarData;
+import com.github.mikephil.charting.data.BarDataSet;
+import com.github.mikephil.charting.data.BarEntry;
+import com.github.mikephil.charting.utils.ColorTemplate;
+
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
+import java.util.Map;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -33,13 +41,32 @@ import retrofit2.Response;
  */
 
 public class DiabetesGraphActivity  extends AppCompatActivity{
-    String[] diab_fasting;
-    String[] diab_fasting_date;
-    String[] diab_pp;
-    String[] diab_pp_date;
-    String[] diab_random;
-    String[] diab_random_date;
+    ArrayList<String> diab_fasting = new ArrayList<>();
+    ArrayList<String> diab_fasting_date = new ArrayList<>();
+    ArrayList<String> diab_pp = new ArrayList<>();
+    ArrayList<String> diab_pp_date = new ArrayList<>();
+    ArrayList<String> diab_random = new ArrayList<>();
+    ArrayList<String> diab_random_date = new ArrayList<>();
+
+
+    ArrayList<Float> reverse_fasting_date = new ArrayList<>();
+    ArrayList<Float> reverse_pp_date = new ArrayList<>();
+    ArrayList<Float> reverse_random_date = new ArrayList<>();
+
+    ArrayList<Float> reverse_fasting = new ArrayList<>();
+    ArrayList<Float> reverse_pp = new ArrayList<>();
+    ArrayList<Float> reverse_random = new ArrayList<>();
+
+
     int k1, k2, k3;
+    PassingThrough passingThrough;
+    TextView txt;
+    float[] floatArray;
+    BarChart chart;
+    ArrayList<BarEntry> BARENTRY;
+    ArrayList<String> BarEntryLabels;
+    BarDataSet Bardataset;
+    BarData BARDATA;
     private ProgressDialog progressDialog;
     private String pid;
 
@@ -49,59 +76,108 @@ public class DiabetesGraphActivity  extends AppCompatActivity{
         setContentView(R.layout.activity_diabetes_graph);
         Intent i = getIntent();
         pid = i.getStringExtra("pid");
-        //diab_fasting = i.getStringArrayExtra("fasting");
-        //diab_fasting_date = i.getStringArrayExtra("fasting_date");
-        //diab_pp = i.getStringArrayExtra("pp");
-        //diab_pp_date = i.getStringArrayExtra("pp_date");
-        //diab_random = i.getStringArrayExtra("random");
-        //diab_random_date = i.getStringArrayExtra("random_date");
+
+        passingThrough = (PassingThrough) i.getSerializableExtra("data");
+        diab_fasting = i.getStringArrayListExtra("fasting");
+        diab_fasting_date = i.getStringArrayListExtra("fasting_date");
+        diab_pp = i.getStringArrayListExtra("pp");
+        diab_pp_date = i.getStringArrayListExtra("pp_date");
+        diab_random = i.getStringArrayListExtra("random");
+        diab_random_date = i.getStringArrayListExtra("random_date");
+
+        StringBuilder str = new StringBuilder(" ");
+        for (int v = 0; v < diab_fasting_date.size(); v++) {
+            reverse_fasting_date.add(v, Float.parseFloat(diab_fasting_date.get(v)));
+            //str.append(reverse_fasting_date.get(v));
+
+        }
+
+
+        for (int v = 0; v < diab_pp_date.size(); v++) {
+            reverse_pp_date.add(v, Float.parseFloat(diab_pp_date.get(v)));
+        }
+        for (int v = 0; v < diab_random_date.size(); v++) {
+            reverse_random_date.add(v, Float.parseFloat(diab_random_date.get(v)));
+        }
+
+        for (int v = 0; v < diab_random.size(); v++) {
+            reverse_random.add(v, Float.parseFloat(diab_random.get(v)));
+        }
+
+        for (int v = 0; v < diab_pp.size(); v++) {
+            reverse_pp.add(v, Float.parseFloat(diab_pp.get(v)));
+        }
+
+        for (int v = 0; v < diab_fasting.size(); v++) {
+            reverse_fasting.add(v, Float.parseFloat(diab_fasting.get(v)));
+        }
+
+
+        Collections.reverse(reverse_fasting_date);
+        Collections.reverse(reverse_pp_date);
+        Collections.reverse(reverse_random_date);
+        Collections.reverse(reverse_random);
+        Collections.reverse(reverse_pp);
+        Collections.reverse(reverse_fasting);
 
 
         k1 = k2 = k3 = 0;
-        GraphView graphview = (GraphView) findViewById(R.id.graph);
-
-        LineGraphSeries<DataPoint> series = new LineGraphSeries<DataPoint>();
-        for (int k = 0; k < diab_fasting.length; k++) {
-            DataPoint point = new DataPoint(diab_fasting_date[i], diab_fasting[i]);
-            series.appendData(point, true, diab_fasting.length);
-        }
-        // styling series
-        series.setTitle("Random Curve 1");
-        series.setColor(Color.GREEN);
-        series.setDrawDataPoints(true);
-        series.setDataPointsRadius(10);
-        series.setThickness(2);
-
-// custom paint to make a dotted line
-
-        LineGraphSeries<DataPoint> series2 = new LineGraphSeries<DataPoint>(new DataPoint[] {
-                new DataPoint(0, 10),
-                new DataPoint(10, 90),
-                new DataPoint(20, 80),
-                new DataPoint(30, 70),
-                new DataPoint(40, 10)
-        });
-
-        series2.setDrawDataPoints(true);
-        series2.setDataPointsRadius(10);
-        series2.setThickness(2);
-        series2.setColor(Color.RED);
-
-        graphview.getViewport().setScrollable(true);
-        graphview.getViewport().setScalableY(true);
-        graphview.getViewport().setScrollableY(true);
-        graphview.getViewport().setYAxisBoundsManual(true);
-        graphview.getViewport().setXAxisBoundsManual(true);
-
-        graphview.getViewport().setMinY(0);
-        graphview.getViewport().setMinX(4);
-        graphview.getViewport().setMaxY(250);
-        graphview.getViewport().setMaxX(200);
+        floatArray = new float[reverse_fasting.size()];
 
 
-        graphview.addSeries(series);
-        graphview.addSeries(series2);
+        chart = (BarChart) findViewById(R.id.chart);
+
+        BARENTRY = new ArrayList<>();
+
+        BarEntryLabels = new ArrayList<String>();
+
+        AddValuesToBARENTRY();
+
+        AddValuesToBarEntryLabels();
+
+        Bardataset = new BarDataSet(BARENTRY, "Projects");
+
+        BARDATA = new BarData(BarEntryLabels, Bardataset);
+
+        Bardataset.setColors(ColorTemplate.COLORFUL_COLORS);
+
+        chart.setData(BARDATA);
+
+        chart.animateY(3000);
+
+
+
     }
+
+
+    public void AddValuesToBARENTRY() {
+        float x1 = 19f;
+
+        BARENTRY.add(new BarEntry(x1, 0));
+        BARENTRY.add(new BarEntry(4f, 1));
+        BARENTRY.add(new BarEntry(6f, 2));
+        BARENTRY.add(new BarEntry(8f, 3));
+        BARENTRY.add(new BarEntry(7f, 4));
+        BARENTRY.add(new BarEntry(3f, 5));
+
+    }
+
+    public void AddValuesToBarEntryLabels() {
+
+        BarEntryLabels.add("January");
+        BarEntryLabels.add("February");
+        BarEntryLabels.add("March");
+        BarEntryLabels.add("April");
+        BarEntryLabels.add("May");
+        BarEntryLabels.add("June");
+
+    }
+
+
+
+
+
+
 
 
     private String convert(String time) {

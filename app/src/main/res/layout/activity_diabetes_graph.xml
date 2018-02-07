@@ -6,12 +6,11 @@
     android:orientation="vertical">
 
 
-    <com.jjoe64.graphview.GraphView
-        android:id="@+id/graph"
+    <com.github.mikephil.charting.charts.BarChart
+
+        android:id="@+id/chart"
         android:layout_width="match_parent"
-        android:layout_height="400dip"
-        android:layout_gravity="center"
-        android:layout_marginTop="148dp"
-        android:padding="4dp" />
+        android:layout_height="400dp"
+        android:layout_marginTop="168dp" />
 
 </LinearLayout>

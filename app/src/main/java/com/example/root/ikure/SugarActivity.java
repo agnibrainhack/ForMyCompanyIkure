@@ -31,17 +31,19 @@ public class SugarActivity extends AppCompatActivity {
 
     String pid;
     FloatingActionButton floatingActionButton;
-    String[] diab_fasting;
-    String[] diab_fasting_date;
-    String[] diab_pp;
-    String[] diab_pp_date;
-    String[] diab_random;
-    String[] diab_random_date;
+    ArrayList<String> diab_fasting = new ArrayList<>(1);
+    ArrayList<String> diab_fasting_date = new ArrayList<>(1);
+    ArrayList<String> diab_pp = new ArrayList<>(1);
+    ArrayList<String> diab_pp_date = new ArrayList<>(1);
+    ArrayList<String> diab_random = new ArrayList<>(1);
+    ArrayList<String> diab_random_date = new ArrayList<>(1);
     int k1, k2, k3;
+
     private ProgressDialog progressDialog;
     private ListView SugarListView;
     private ArrayList<Data_class_four> dy = new ArrayList<Data_class_four>();
     private SugarAdapter sugarAdapter;
+    private PassingThrough obj;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,9 +63,9 @@ public class SugarActivity extends AppCompatActivity {
                 k.putExtra("fasting_date", diab_fasting_date);
                 k.putExtra("pp", diab_pp);
                 k.putExtra("pp_date", diab_pp_date);
-                k.putExtra("random", diab_random);
-                k.putExtra("random_date", diab_random_date);
-
+                k.putExtra("random", diab_pp);
+                k.putExtra("random_date", diab_pp_date);
+                k.putExtra("data", obj);
                 startActivity(k);
             }
         });
@@ -109,22 +111,23 @@ public class SugarActivity extends AppCompatActivity {
                                         convert(result.body().getSugarlist().get(i).getTimestamp())));
 
                                 if (result.body().getSugarlist().get(i).getSugarFirst() != "NA") {
-                                    diab_fasting[k1] = result.body().getSugarlist().get(i).getSugarFirst();
-                                    diab_fasting_date[k1] = result.body().getSugarlist().get(i).getTimestamp();
+                                    diab_fasting.add(k1, result.body().getSugarlist().get(i).getSugarFirst());
+                                    diab_fasting_date.add(k1, result.body().getSugarlist().get(i).getTimestamp());
                                     k1++;
                                 }
                                 if (result.body().getSugarlist().get(i).getSugarFirst() != "NA") {
-                                    diab_pp[k2] = result.body().getSugarlist().get(i).getSugarFirst();
-                                    diab_pp_date[k2] = result.body().getSugarlist().get(i).getTimestamp();
+                                    diab_pp.add(k2, result.body().getSugarlist().get(i).getSugarFirst());
+                                    diab_pp_date.add(k2, result.body().getSugarlist().get(i).getTimestamp());
                                     k2++;
                                 }
                                 if (result.body().getSugarlist().get(i).getSugarFirst() != "NA") {
-                                    diab_random[k3] = result.body().getSugarlist().get(i).getSugarFirst();
-                                    diab_random_date[k3] = result.body().getSugarlist().get(i).getTimestamp();
+                                    diab_random.add(k3, result.body().getSugarlist().get(i).getSugarFirst());
+                                    diab_random_date.add(k3, result.body().getSugarlist().get(i).getTimestamp());
                                     k3++;
                                 }
 
                             }
+                            obj = new PassingThrough(diab_fasting, diab_fasting_date, diab_pp, diab_pp_date, diab_random, diab_random_date);
                             sugarAdapter = new SugarAdapter(getBaseContext(), dy);
 
                             SugarListView = (ListView) findViewById(R.id.list_of_sugar);

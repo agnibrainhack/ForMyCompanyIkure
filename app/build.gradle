@@ -33,7 +33,8 @@ dependencies {
     compile 'com.android.support:design:26.1.0'
     compile 'com.nightonke:boommenu:2.1.1'
     compile 'com.android.support:cardview-v7:26.1.0'
-    compile 'com.jjoe64:graphview:4.2.1'
+    implementation 'com.github.PhilJay:MPAndroidChart:v2.2.4'
+
 
 
 }
