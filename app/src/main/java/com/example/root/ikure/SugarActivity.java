@@ -9,6 +9,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import com.example.root.ikure.pojo.earthquakeModel.SugarDetail;
@@ -32,7 +33,7 @@ import retrofit2.Response;
 public class SugarActivity extends AppCompatActivity {
 
     String pid;
-
+    RelativeLayout relativeLayout;
     ArrayList<String> diab_fasting = new ArrayList<>(1);
     ArrayList<String> diab_fasting_date = new ArrayList<>(1);
     ArrayList<String> diab_pp = new ArrayList<>(1);
@@ -66,6 +67,7 @@ public class SugarActivity extends AppCompatActivity {
         floatingActionButtonfasting = findViewById(R.id.fast);
         floatingActionButtonpp = findViewById(R.id.pp_render);
         k1 = k2 = k3 = 0;
+        relativeLayout = findViewById(R.id.changerelative);
 
         floatingActionButtonrandom = findViewById(R.id.random_render);
 
@@ -73,6 +75,7 @@ public class SugarActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Intent k = new Intent(SugarActivity.this, Diabetes_Graph_Random.class);
+
                 if (diab_random.size() > 5) {
                     for (int i = 0; i < 5; i++) {
                         if (diab_random.get(i) != null)

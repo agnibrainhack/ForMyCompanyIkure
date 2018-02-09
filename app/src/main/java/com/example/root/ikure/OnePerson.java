@@ -38,12 +38,12 @@ import retrofit2.Response;
  */
 
 public class OnePerson extends AppCompatActivity {
+    static final int REQUEST_IMAGE_CAPTURE = 1;
     Button ecg,prescriptions,vitals;
     String image;
     Bitmap imageBitmap;
     //Button upload_server;
     ImageView imageView;
-    static final int REQUEST_IMAGE_CAPTURE = 1;
     String pos;
     TextView name,age,last;
     BoomMenuButton bmb ;
@@ -122,7 +122,7 @@ public class OnePerson extends AppCompatActivity {
                 .listener(new OnBMClickListener() {
                     @Override
                     public void onBoomButtonClick(int index) {
-                        Intent i = new Intent(OnePerson.this,PrescriptionActivity.class);
+                        Intent i = new Intent(OnePerson.this, Blood_Pressure_Activity.class);
                         i.putExtra("resources",pos);
                         startActivity(i);
 

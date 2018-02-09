@@ -2,6 +2,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:fab="http://schemas.android.com/tools"
+    android:id="@+id/changerelative"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
@@ -23,38 +24,73 @@
         android:layout_marginRight="16dp">
 
         <TextView
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:gravity="center"
             android:text="Fasting"
             android:textSize="18sp"/>
+
         <TextView
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:gravity="center"
             android:text=" PP"
             android:textSize="18sp"/>
         <TextView
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:gravity="center"
             android:text="Random"
             android:textSize="18sp"/>
     </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/metrics"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/types"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp">
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="mg/dl"
+            android:textSize="14sp" />
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="mg/dl"
+            android:textSize="14sp" />
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="mg/dl"
+            android:textSize="14sp" />
+    </LinearLayout>
     <ListView
         android:id="@+id/list_of_sugar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/types"
+        android:layout_below="@+id/metrics"
         android:divider="@null"
         android:dividerHeight="0dp"
 
         >
 
     </ListView>
+
 
     <com.github.clans.fab.FloatingActionMenu
         android:id="@+id/menu"
@@ -78,37 +114,42 @@
         fab:menu_shadowRadius="4dp"
         fab:menu_shadowXOffset="1dp"
         fab:menu_shadowYOffset="3dp"
-        fab:menu_showShadow="true">
+        fab:menu_showShadow="true"
+
+        >
 
         <com.github.clans.fab.FloatingActionButton
             android:id="@+id/random_render"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/color_darkyellow"
+            android:src="@drawable/graph"
+            app:fab_label="Random"
             fab:fab_colorNormal="@color/colorPrimary"
             fab:fab_colorPressed="@color/colorPrimaryDark"
             fab:fab_colorRipple="@color/colorAccent"
-            fab:fab_size="mini" />
+            fab:fab_size="large" />
 
         <com.github.clans.fab.FloatingActionButton
             android:id="@+id/pp_render"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/circ_red"
+            android:src="@drawable/graph"
+            app:fab_label="PP"
             fab:fab_colorNormal="@color/colorPrimary"
             fab:fab_colorPressed="@color/colorPrimaryDark"
             fab:fab_colorRipple="@color/colorAccent"
-            fab:fab_size="mini" />
+            fab:fab_size="large" />
 
         <com.github.clans.fab.FloatingActionButton
             android:id="@+id/fast"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/circ_res"
+            android:src="@drawable/graph"
+            app:fab_label="Fasting"
             fab:fab_colorNormal="@color/colorPrimary"
             fab:fab_colorPressed="@color/colorPrimaryDark"
             fab:fab_colorRipple="@color/colorAccent"
-            fab:fab_size="mini" />
+            fab:fab_size="large" />
 
     </com.github.clans.fab.FloatingActionMenu>
 
