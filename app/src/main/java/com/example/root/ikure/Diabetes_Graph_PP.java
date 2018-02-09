@@ -39,7 +39,6 @@ import com.github.mikephil.charting.listener.OnChartGestureListener;
 import com.github.mikephil.charting.listener.OnChartValueSelectedListener;
 
 
-
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 
@@ -48,16 +47,16 @@ import java.util.ArrayList;
  * Created by hp on 03-02-2018.
  */
 
-public class DiabetesGraphActivity extends AppCompatActivity implements OnChartGestureListener, OnChartValueSelectedListener {
+public class Diabetes_Graph_PP extends AppCompatActivity implements OnChartGestureListener, OnChartValueSelectedListener {
 
 
     int k1, k2, k3;
     PassingThrough passingThrough;
     TextView txt;
-    private float[] floatArray;
-    private String fasting[] = new String[5];
-    private float f1, f2, f3, f4, f5;
-    private float f1_d, f2_d, f3_d, f4_d, f5_d;
+    float[] floatArray;
+    String fasting[] = new String[5];
+    float f1, f2, f3, f4, f5;
+    float f1_d, f2_d, f3_d, f4_d, f5_d;
 
     private ProgressDialog progressDialog;
     private String pid;
@@ -71,17 +70,17 @@ public class DiabetesGraphActivity extends AppCompatActivity implements OnChartG
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_diabetes_graph);
+        setContentView(R.layout.activity_diabetes_pp_graph);
         Intent i = getIntent();
 
-        mChart = (LineChart) findViewById(R.id.chart);
+        mChart = (LineChart) findViewById(R.id.chart2);
         mChart.setOnChartGestureListener(this);
         mChart.setOnChartValueSelectedListener(this);
         mChart.setDrawGridBackground(false);
 
-        fasting = i.getStringArrayExtra("fasting");
+        fasting = i.getStringArrayExtra("pp");
 
-        fasting_date = i.getStringArrayExtra("fasting_date");
+        fasting_date = i.getStringArrayExtra("pp_date");
 
         if (fasting[0] != null)
             f1 = Float.parseFloat(fasting[0]);
@@ -103,6 +102,13 @@ public class DiabetesGraphActivity extends AppCompatActivity implements OnChartG
             f5 = Float.parseFloat(fasting[4]);
         else
             f5 = 0;
+
+        greatest = Float.parseFloat(fasting[0]);
+        for (int j = 1; j < 5; j++) {
+            if (Float.parseFloat(fasting[j]) > greatest) {
+                greatest = Float.parseFloat(fasting[j]);
+            }
+        }
 
 
         if (fasting_date[0] != null)
@@ -128,13 +134,6 @@ public class DiabetesGraphActivity extends AppCompatActivity implements OnChartG
 
         k1 = k2 = k3 = 0;
 
-        greatest = Float.parseFloat(fasting[0]);
-        for (int j = 1; j < 5; j++) {
-            if (Float.parseFloat(fasting[j]) > greatest) {
-                greatest = Float.parseFloat(fasting[j]);
-            }
-        }
-
         setData();
         // get the legend (only possible after setting data)
         Legend l = mChart.getLegend();
@@ -144,7 +143,7 @@ public class DiabetesGraphActivity extends AppCompatActivity implements OnChartG
         l.setForm(Legend.LegendForm.LINE);
 
         // no description text
-        mChart.setDescription("Fasting Trends");
+        mChart.setDescription("PP Trends");
         mChart.setNoDataTextDescription("You need to provide data for the chart.");
 
         // enable touch gestures
@@ -192,8 +191,6 @@ public class DiabetesGraphActivity extends AppCompatActivity implements OnChartG
         mChart.invalidate();
 
 
-
-
     }
 
 
@@ -227,7 +224,7 @@ public class DiabetesGraphActivity extends AppCompatActivity implements OnChartG
         LineDataSet set1;
 
         // create a dataset and give it a type
-        set1 = new LineDataSet(yVals, "Fasting Levels");
+        set1 = new LineDataSet(yVals, "PP Levels");
 
         set1.setFillAlpha(110);
         // set1.setFillColor(Color.RED);
