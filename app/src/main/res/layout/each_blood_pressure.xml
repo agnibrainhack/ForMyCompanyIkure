@@ -89,7 +89,7 @@
                         android:layout_height="41dp"
                         android:layout_gravity="center_horizontal"
                         android:layout_weight=".33"
-                        android:gravity="center"
+                        android:gravity="center|left"
 
                         android:text="SYS"
                         android:textColor="#757575"
@@ -112,8 +112,8 @@
                         android:layout_height="41dp"
                         android:layout_gravity="center_horizontal"
                         android:layout_weight=".33"
-                        android:gravity="center"
-                        android:text="DIA:"
+                        android:gravity="left|center"
+                        android:text="DIA"
                         android:textColor="#757575"
                         android:textSize="12sp" />
 

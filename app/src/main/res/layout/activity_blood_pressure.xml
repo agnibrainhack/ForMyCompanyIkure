@@ -23,6 +23,7 @@
         android:layout_below="@+id/header"
         android:divider="@null"
         android:dividerHeight="0dp"
+        android:paddingBottom="4dp"
 
         >
 
@@ -53,34 +54,17 @@
         fab:menu_showShadow="true">
 
         <com.github.clans.fab.FloatingActionButton
-            android:id="@+id/random_render"
+            android:id="@+id/pressure_graph"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/color_darkyellow"
+            android:src="@drawable/graph"
+            app:fab_label="BP Trends"
             fab:fab_colorNormal="@color/colorPrimary"
             fab:fab_colorPressed="@color/colorPrimaryDark"
             fab:fab_colorRipple="@color/colorAccent"
             fab:fab_size="mini" />
 
-        <com.github.clans.fab.FloatingActionButton
-            android:id="@+id/pp_render"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/circ_red"
-            fab:fab_colorNormal="@color/colorPrimary"
-            fab:fab_colorPressed="@color/colorPrimaryDark"
-            fab:fab_colorRipple="@color/colorAccent"
-            fab:fab_size="mini" />
 
-        <com.github.clans.fab.FloatingActionButton
-            android:id="@+id/fast"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/circ_res"
-            fab:fab_colorNormal="@color/colorPrimary"
-            fab:fab_colorPressed="@color/colorPrimaryDark"
-            fab:fab_colorRipple="@color/colorAccent"
-            fab:fab_size="mini" />
 
     </com.github.clans.fab.FloatingActionMenu>
 

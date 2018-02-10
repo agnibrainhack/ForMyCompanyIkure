@@ -1,5 +1,6 @@
 package com.example.root.ikure.rest;
 
+import com.example.root.ikure.pojo.earthquakeModel.BPDetails;
 import com.example.root.ikure.pojo.earthquakeModel.CardDetails;
 import com.example.root.ikure.pojo.earthquakeModel.DifferentVitals;
 import com.example.root.ikure.pojo.earthquakeModel.EcgListDetail;
@@ -49,6 +50,9 @@ public interface ApiInterface {
 
     @GET("vital/sugarlist")
     Call<SugarDetail> getDetails9(@Query("pid") String pid);
+
+    @GET("vital/bplist")
+    Call<BPDetails> getDetails10(@Query("pid") String pid);
 
 
 
