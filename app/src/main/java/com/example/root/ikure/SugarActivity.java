@@ -76,32 +76,8 @@ public class SugarActivity extends AppCompatActivity {
             public void onClick(View view) {
                 Intent k = new Intent(SugarActivity.this, Diabetes_Graph_Random.class);
 
-                if (diab_random.size() > 5) {
-                    for (int i = 0; i < 5; i++) {
-                        if (diab_random.get(i) != null)
-                            f3[i] = diab_random.get(i);
-                    }
-                } else if (diab_random.size() < 5) {
-                    for (int i = 0; i < diab_random.size(); i++) {
-                        if (diab_random.get(i) != null)
-                            f3[i] = diab_random.get(i);
-                    }
-                }
-
-
-                if (diab_random_date.size() > 5) {
-                    for (int i = 0; i < 5; i++) {
-                        if (diab_random_date.get(i) != null)
-                            r_d[i] = diab_random_date.get(i);
-                    }
-                } else if (diab_random_date.size() < 5) {
-                    for (int i = 0; i < diab_random_date.size(); i++) {
-                        if (diab_random_date.get(i) != null)
-                            r_d[i] = diab_random_date.get(i);
-                    }
-                }
-                k.putExtra("random", f3);
-                k.putExtra("random_date", r_d);
+                k.putExtra("random", diab_random);
+                k.putExtra("random_date", diab_random_date);
                 startActivity(k);
 
             }
@@ -112,33 +88,9 @@ public class SugarActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Intent k = new Intent(SugarActivity.this, Diabetes_Graph_PP.class);
-                if (diab_pp.size() > 5) {
-                    for (int i = 0; i < 5; i++) {
-                        if (diab_pp.get(i) != null)
-                            f2[i] = diab_pp.get(i);
-                    }
-                } else if (diab_pp.size() < 5) {
-                    for (int i = 0; i < diab_pp.size(); i++) {
-                        if (diab_pp.get(i) != null)
-                            f2[i] = diab_pp.get(i);
-                    }
 
-                }
-
-
-                if (diab_pp_date.size() > 5) {
-                    for (int i = 0; i < 5; i++) {
-                        if (diab_pp_date.get(i) != null)
-                            p_d[i] = diab_pp_date.get(i);
-                    }
-                } else if (diab_pp_date.size() < 5) {
-                    for (int i = 0; i < diab_pp_date.size(); i++) {
-                        if (diab_pp_date.get(i) != null)
-                            p_d[i] = diab_pp_date.get(i);
-                    }
-                }
-                k.putExtra("pp", f2);
-                k.putExtra("pp_date", p_d);
+                k.putExtra("pp", diab_pp);
+                k.putExtra("pp_date", diab_pp_date);
                 startActivity(k);
 
             }
@@ -150,32 +102,9 @@ public class SugarActivity extends AppCompatActivity {
             public void onClick(View view) {
                 Intent k = new Intent(SugarActivity.this, DiabetesGraphActivity.class);
                 //Collections.reverse(diab_fasting);
-                if (diab_fasting.size() > 5) {
-                    for (int i = 0; i < 5; i++) {
-                        if (diab_fasting.get(i) != null)
-                            f1[i] = diab_fasting.get(i);
-                    }
-                } else if (diab_fasting.size() < 5) {
-                    for (int i = 0; i < diab_fasting.size(); i++) {
-                        if (diab_fasting.get(i) != null)
-                            f1[i] = diab_fasting.get(i);
-                    }
-                }
 
-                if (diab_fasting_date.size() > 5) {
-                    for (int i = 0; i < 5; i++) {
-                        if (diab_fasting_date.get(i) != null)
-                            f_d[i] = diab_fasting_date.get(i);
-                    }
-                } else if (diab_fasting_date.size() < 5) {
-                    for (int i = 0; i < diab_fasting_date.size(); i++) {
-                        if (diab_fasting_date.get(i) != null)
-                            f_d[i] = diab_fasting_date.get(i);
-                    }
-                }
-
-                k.putExtra("fasting", f1);
-                k.putExtra("fasting_date", f_d);
+                k.putExtra("fasting", diab_fasting);
+                k.putExtra("fasting_date", diab_fasting_date);
                 startActivity(k);
             }
         });

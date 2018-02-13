@@ -27,12 +27,16 @@ import retrofit2.Response;
  */
 
 public class Blood_Pressure_Activity extends AppCompatActivity {
+    int k1;
     private String pid;
-    private View floatingactionbutton;
     private ProgressDialog progressDialog;
     private ArrayList<Data_class_five> dy = new ArrayList<>();
     private BpAdapter bpAdapter;
     private ListView BpListView;
+    private ArrayList<String> systolic = new ArrayList<>();
+    private ArrayList<String> diastolic = new ArrayList<>();
+    private ArrayList<String> timestamp = new ArrayList<>();
+    private View floatingactionbutton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,11 +45,17 @@ public class Blood_Pressure_Activity extends AppCompatActivity {
         Intent i = getIntent();
         pid = i.getStringExtra("resources");
         //Toast.makeText(Blood_Pressure_Activity.this, pid, Toast.LENGTH_LONG).show();
+        k1 = 0;
         floatingactionbutton = findViewById(R.id.pressure_graph);
         floatingactionbutton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                Intent k = new Intent(Blood_Pressure_Activity.this, Blood_Pressure_Graph.class);
 
+                k.putExtra("systolic", systolic);
+                k.putExtra("diastolic", diastolic);
+                k.putExtra("timestamp", timestamp);
+                startActivity(k);
             }
         });
         init();
@@ -89,21 +99,14 @@ public class Blood_Pressure_Activity extends AppCompatActivity {
                                         result.body().getBplist().get(i).getSys(),
                                         result.body().getBplist().get(i).getDia()));
 
-                              /*  if (!Objects.equals(result.body().getBplist().get(i).getSugarFirst(), "NIL")) {
-                                    diab_fasting.add(k1, result.body().getBplist().get(i).getSugarFirst());
-                                    diab_fasting_date.add(k1, result.body().getBplist().get(i).getTimestamp());
+                                if (!Objects.equals(result.body().getBplist().get(i).getSys(), null) &&
+                                        !Objects.equals(result.body().getBplist().get(i).getDia(), null)) {
+                                    systolic.add(k1, result.body().getBplist().get(i).getSys());
+                                    diastolic.add(k1, result.body().getBplist().get(i).getDia());
+                                    timestamp.add(k1, result.body().getBplist().get(i).getTimestamp());
                                     k1++;
                                 }
-                                if (!Objects.equals(result.body().getBplist().get(i).getSugarPp(), "NIL")) {
-                                    diab_pp.add(k2, result.body().getBplist().get(i).getSugarPp());
-                                    diab_pp_date.add(k2, result.body().getBplist().get(i).getTimestamp());
-                                    k2++;
-                                }
-                                if (!Objects.equals(result.body().getBplist().get(i).getSugarRandom(), "NIL")) {
-                                    diab_random.add(k3, result.body().getBplist().get(i).getSugarRandom());
-                                    diab_random_date.add(k3, result.body().getBplist().get(i).getTimestamp());
-                                    k3++;
-                                }*/
+
 
                             }
                             //obj = new PassingThrough(diab_fasting, diab_fasting_date, diab_pp, diab_pp_date, diab_random, diab_random_date);

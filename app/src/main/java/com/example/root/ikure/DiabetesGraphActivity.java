@@ -39,9 +39,9 @@ import com.github.mikephil.charting.listener.OnChartGestureListener;
 import com.github.mikephil.charting.listener.OnChartValueSelectedListener;
 
 
-
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Collections;
 
 
 /**
@@ -54,86 +54,48 @@ public class DiabetesGraphActivity extends AppCompatActivity implements OnChartG
     int k1, k2, k3;
     PassingThrough passingThrough;
     TextView txt;
-    private float[] floatArray;
-    private String fasting[] = new String[5];
-    private float f1, f2, f3, f4, f5;
-    private float f1_d, f2_d, f3_d, f4_d, f5_d;
+
 
     private ProgressDialog progressDialog;
     private String pid;
     private String[] pp = new String[5];
-    private String[] random = new String[5];
+    //private String[] random = new String[5];
     private LineChart mChart;
     private String[] fasting_date = new String[5];
     private float greatest;
+    private ArrayList<String> random = new ArrayList<>();
+    private ArrayList<String> random_date = new ArrayList<>();
+
+
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_diabetes_graph);
+        setContentView(R.layout.activity_diabetes_pp_graph);
         Intent i = getIntent();
 
-        mChart = (LineChart) findViewById(R.id.chart);
+        mChart = (LineChart) findViewById(R.id.chart2);
         mChart.setOnChartGestureListener(this);
         mChart.setOnChartValueSelectedListener(this);
         mChart.setDrawGridBackground(false);
 
-        fasting = i.getStringArrayExtra("fasting");
+        random = i.getStringArrayListExtra("fasting");
+        random_date = i.getStringArrayListExtra("fasting_date");
+        Collections.reverse(random);
+        Collections.reverse(random_date);
 
-        fasting_date = i.getStringArrayExtra("fasting_date");
-
-        if (fasting[0] != null)
-            f1 = Float.parseFloat(fasting[0]);
-        else
-            f1 = 0;
-        if (fasting[1] != null)
-            f2 = Float.parseFloat(fasting[1]);
-        else
-            f2 = 0;
-        if (fasting[2] != null)
-            f3 = Float.parseFloat(fasting[2]);
-        else
-            f3 = 0;
-        if (fasting[3] != null)
-            f4 = Float.parseFloat(fasting[3]);
-        else
-            f4 = 0;
-        if (fasting[4] != null)
-            f5 = Float.parseFloat(fasting[4]);
-        else
-            f5 = 0;
-
-
-        if (fasting_date[0] != null)
-            f1_d = Float.parseFloat(fasting_date[0]);
-        else
-            f1_d = 0;
-        if (fasting_date[1] != null)
-            f2_d = Float.parseFloat(fasting_date[1]);
-        else
-            f2_d = 0;
-        if (fasting_date[2] != null)
-            f3_d = Float.parseFloat(fasting_date[2]);
-        else
-            f3_d = 0;
-        if (fasting_date[3] != null)
-            f4_d = Float.parseFloat(fasting_date[3]);
-        else
-            f4_d = 0;
-        if (fasting_date[4] != null)
-            f5_d = Float.parseFloat(fasting_date[4]);
-        else
-            f5_d = 0;
-
-        k1 = k2 = k3 = 0;
-
-        greatest = Float.parseFloat(fasting[0]);
-        for (int j = 1; j < 5; j++) {
-            if (Float.parseFloat(fasting[j]) > greatest) {
-                greatest = Float.parseFloat(fasting[j]);
+        greatest = Float.parseFloat(random.get(0));
+        for (int j = 0; j < random.size(); j++) {
+            if (Float.parseFloat(random.get(j)) > greatest) {
+                greatest = Float.parseFloat(random.get(j));
             }
         }
+
+
+
+
+        k1 = k2 = k3 = 0;
 
         setData();
         // get the legend (only possible after setting data)
@@ -192,29 +154,23 @@ public class DiabetesGraphActivity extends AppCompatActivity implements OnChartG
         mChart.invalidate();
 
 
-
-
     }
 
 
     private ArrayList<String> setXAxisValues() {
         ArrayList<String> xVals = new ArrayList<String>();
-        xVals.add(String.valueOf(convert(f5_d)));
-        xVals.add(String.valueOf(convert(f4_d)));
-        xVals.add(String.valueOf(convert(f3_d)));
-        xVals.add(String.valueOf(convert(f2_d)));
-        xVals.add(String.valueOf(convert(f1_d)));
+        for (int j = 0; j < random_date.size(); j++) {
+            xVals.add(String.valueOf(convert(Float.valueOf(random_date.get(j)))));
+        }
 
         return xVals;
     }
 
     private ArrayList<Entry> setYAxisValues() {
         ArrayList<Entry> yVals = new ArrayList<Entry>();
-        yVals.add(new Entry(f5, 0));
-        yVals.add(new Entry(f4, 1));
-        yVals.add(new Entry(f3, 2));
-        yVals.add(new Entry(f2, 3));
-        yVals.add(new Entry(f1, 4));
+        for (int j = 0; j < random.size(); j++) {
+            yVals.add(new Entry(Float.valueOf(random.get(j)), j));
+        }
 
         return yVals;
     }
