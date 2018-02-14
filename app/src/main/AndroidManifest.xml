@@ -126,7 +126,8 @@
             </intent-filter>
         </activity>
 
-        <activity android:name=".SugarActivity">
+        <activity android:name=".SugarActivity"
+            android:noHistory="true">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
 
@@ -163,7 +164,8 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".Blood_Pressure_Activity">
+            android:name=".Blood_Pressure_Activity"
+            android:noHistory="true">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
 
@@ -173,6 +175,15 @@
         <activity
             android:name=".Blood_Pressure_Graph"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".CheckupActivity"
+            >
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
 

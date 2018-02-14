@@ -82,6 +82,7 @@ public class DiabetesGraphActivity extends AppCompatActivity implements OnChartG
 
         random = i.getStringArrayListExtra("fasting");
         random_date = i.getStringArrayListExtra("fasting_date");
+        pid = i.getStringExtra("pid");
         Collections.reverse(random);
         Collections.reverse(random_date);
 
@@ -290,7 +291,14 @@ public class DiabetesGraphActivity extends AppCompatActivity implements OnChartG
 
         //return date;
     }
-
+    @Override
+    public void onBackPressed() {
+        Intent i = new Intent(DiabetesGraphActivity.this, SugarActivity.class);
+        i.putExtra("resources",pid);
+        finish();
+        startActivity(i);
+        //super.onBackPressed();
+    }
 }
 
 

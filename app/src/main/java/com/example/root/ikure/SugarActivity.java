@@ -78,6 +78,7 @@ public class SugarActivity extends AppCompatActivity {
 
                 k.putExtra("random", diab_random);
                 k.putExtra("random_date", diab_random_date);
+                k.putExtra("pid", pid);
                 startActivity(k);
 
             }
@@ -91,6 +92,7 @@ public class SugarActivity extends AppCompatActivity {
 
                 k.putExtra("pp", diab_pp);
                 k.putExtra("pp_date", diab_pp_date);
+                k.putExtra("pid", pid);
                 startActivity(k);
 
             }
@@ -105,6 +107,7 @@ public class SugarActivity extends AppCompatActivity {
 
                 k.putExtra("fasting", diab_fasting);
                 k.putExtra("fasting_date", diab_fasting_date);
+                k.putExtra("pid", pid);
                 startActivity(k);
             }
         });

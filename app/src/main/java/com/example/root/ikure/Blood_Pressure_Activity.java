@@ -55,6 +55,7 @@ public class Blood_Pressure_Activity extends AppCompatActivity {
                 k.putExtra("systolic", systolic);
                 k.putExtra("diastolic", diastolic);
                 k.putExtra("timestamp", timestamp);
+                k.putExtra("pid", pid);
                 startActivity(k);
             }
         });

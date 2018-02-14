@@ -43,6 +43,7 @@ public class Blood_Pressure_Graph extends AppCompatActivity implements OnChartGe
     private ArrayList<String> systolic = new ArrayList<>();
     private ArrayList<String> diastolic = new ArrayList<>();
     private ArrayList<String> timestamp = new ArrayList<>();
+    private String pid;
 
 
     @Override
@@ -53,6 +54,7 @@ public class Blood_Pressure_Graph extends AppCompatActivity implements OnChartGe
         systolic = i.getStringArrayListExtra("systolic");
         diastolic = i.getStringArrayListExtra("diastolic");
         timestamp = i.getStringArrayListExtra("timestamp");
+        pid = i.getStringExtra("pid");
         Collections.reverse(systolic);
         Collections.reverse(diastolic);
         Collections.reverse(timestamp);
@@ -293,5 +295,14 @@ public class Blood_Pressure_Graph extends AppCompatActivity implements OnChartGe
         return formatter.format(tim);
 
         //return date;
+    }
+
+    @Override
+    public void onBackPressed() {
+        Intent i = new Intent(Blood_Pressure_Graph.this, SugarActivity.class);
+        i.putExtra("resources",pid);
+        finish();
+        startActivity(i);
+        //super.onBackPressed();
     }
 }

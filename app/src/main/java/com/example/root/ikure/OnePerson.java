@@ -64,8 +64,8 @@ public class OnePerson extends AppCompatActivity {
 
         bmb= (BoomMenuButton) findViewById(R.id.bmb);
         bmb.setButtonEnum(ButtonEnum.Ham);
-        bmb.setPiecePlaceEnum(PiecePlaceEnum.HAM_5);
-        bmb.setButtonPlaceEnum(ButtonPlaceEnum.HAM_5);
+        bmb.setPiecePlaceEnum(PiecePlaceEnum.HAM_6);
+        bmb.setButtonPlaceEnum(ButtonPlaceEnum.HAM_6);
 
 
         bmb.addBuilder(new HamButton.Builder()
@@ -79,7 +79,6 @@ public class OnePerson extends AppCompatActivity {
                 .normalText("ECG Reports")
                 .normalTextColor(Color.WHITE)
                 .rippleEffect(true)
-                .pieceColor(Color.parseColor("#000000"))
                 .listener(new OnBMClickListener() {
                     @Override
                     public void onBoomButtonClick(int index) {
@@ -96,6 +95,7 @@ public class OnePerson extends AppCompatActivity {
                 .normalColor(Color.parseColor("#e55039"))
                 .rotateImage(true)
                 .shadowRadius(Util.dp2px(20))
+                .pieceColor(Color.CYAN)
                 .shadowCornerRadius(Util.dp2px(5))
                 .shadowColor(Color.parseColor("#80ff0000"))
                 .normalText("Prescriptions")
@@ -169,6 +169,29 @@ public class OnePerson extends AppCompatActivity {
                     @Override
                     public void onBoomButtonClick(int index) {
                         Intent i = new Intent(OnePerson.this,VitalsActivity.class);
+                        i.putExtra("resources",pos);
+                        startActivity(i);
+
+                    }
+                })
+        );
+
+
+        bmb.addBuilder(new HamButton.Builder()
+                .normalImageRes(R.drawable.checkup)
+                .shadowEffect(true)
+                .normalColor(Color.parseColor("#273c75"))
+                .rotateImage(true)
+                .shadowRadius(Util.dp2px(20))
+                .shadowCornerRadius(Util.dp2px(5))
+                .shadowColor(Color.parseColor("#80ff0000"))
+                .normalText("Schedule Check Ups")
+                .normalTextColor(Color.WHITE)
+                .rippleEffect(true)
+                .listener(new OnBMClickListener() {
+                    @Override
+                    public void onBoomButtonClick(int index) {
+                        Intent i = new Intent(OnePerson.this,CheckupActivity.class);
                         i.putExtra("resources",pos);
                         startActivity(i);
 

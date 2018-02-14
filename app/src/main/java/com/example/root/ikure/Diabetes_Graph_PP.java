@@ -82,6 +82,7 @@ public class Diabetes_Graph_PP extends AppCompatActivity implements OnChartGestu
 
         random = i.getStringArrayListExtra("pp");
         random_date = i.getStringArrayListExtra("pp_date");
+        pid = i.getStringExtra("pid");
         Collections.reverse(random);
         Collections.reverse(random_date);
 
@@ -289,6 +290,14 @@ public class Diabetes_Graph_PP extends AppCompatActivity implements OnChartGestu
         return formatter.format(tim);
 
         //return date;
+    }
+    @Override
+    public void onBackPressed() {
+        Intent i = new Intent(Diabetes_Graph_PP.this, SugarActivity.class);
+        i.putExtra("resources",pid);
+        finish();
+        startActivity(i);
+        //super.onBackPressed();
     }
 
 }

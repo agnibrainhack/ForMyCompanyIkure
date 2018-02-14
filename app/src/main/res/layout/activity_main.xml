@@ -33,10 +33,11 @@
 
     <Button
         android:id="@+id/button"
-        android:layout_width="match_parent"
+        android:layout_width="290dp"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:text="QR Scan"
+        android:textColor="#FFFFFF"
         android:layout_below="@id/serve"
         android:textSize="18sp"
         android:textStyle="bold"
